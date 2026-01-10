@@ -287,6 +287,8 @@ pub enum ProgramSection {
     StructOps {
         sleepable: bool,
     },
+    /// `BPF_PROG_TYPE_SYSCALL` - invoked via `bpf()` syscall
+    Syscall,
 }
 
 impl FromStr for ProgramSection {

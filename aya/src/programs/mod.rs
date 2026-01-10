@@ -67,6 +67,7 @@ pub mod sk_skb;
 pub mod sock_ops;
 pub mod socket_filter;
 pub mod struct_ops;
+pub mod syscall;
 pub mod tc;
 pub mod tp_btf;
 pub mod trace_point;
@@ -121,6 +122,7 @@ pub use crate::programs::{
     sock_ops::SockOps,
     socket_filter::{SocketFilter, SocketFilterError},
     struct_ops::StructOps,
+    syscall::Syscall,
     tc::{SchedClassifier, TcAttachType, TcError},
     tp_btf::BtfTracePoint,
     trace_point::{TracePoint, TracePointError},
@@ -340,6 +342,8 @@ pub enum Program {
     Iter(Iter),
     /// A [`StructOps`] program
     StructOps(StructOps),
+    /// A [`Syscall`] program
+    Syscall(Syscall),
 }
 
 impl Program {
@@ -381,6 +385,7 @@ impl Program {
             Self::CgroupDevice(_) => ProgramType::CgroupDevice,
             Self::FlowDissector(_) => ProgramType::FlowDissector,
             Self::StructOps(_) => ProgramType::StructOps,
+            Self::Syscall(_) => ProgramType::Syscall,
         }
     }
 
@@ -415,6 +420,7 @@ impl Program {
             Self::CgroupDevice(p) => p.pin(path),
             Self::Iter(p) => p.pin(path),
             Self::StructOps(p) => p.pin(path),
+            Self::Syscall(p) => p.pin(path),
         }
     }
 
@@ -449,6 +455,7 @@ impl Program {
             Self::CgroupDevice(mut p) => p.unload(),
             Self::Iter(mut p) => p.unload(),
             Self::StructOps(mut p) => p.unload(),
+            Self::Syscall(mut p) => p.unload(),
         }
     }
 
@@ -485,6 +492,7 @@ impl Program {
             Self::CgroupDevice(p) => p.fd(),
             Self::Iter(p) => p.fd(),
             Self::StructOps(p) => p.fd(),
+            Self::Syscall(p) => p.fd(),
         }
     }
 
@@ -522,6 +530,7 @@ impl Program {
             Self::CgroupDevice(p) => p.info(),
             Self::Iter(p) => p.info(),
             Self::StructOps(p) => p.info(),
+            Self::Syscall(p) => p.info(),
         }
     }
 }
@@ -833,6 +842,7 @@ impl_program_unload!(
     CgroupDevice,
     Iter,
     StructOps,
+    Syscall,
 );
 
 macro_rules! impl_fd {
@@ -877,6 +887,7 @@ impl_fd!(
     CgroupDevice,
     Iter,
     StructOps,
+    Syscall,
 );
 
 /// Trait implemented by the [`Program`] types which support the kernel's
@@ -986,6 +997,7 @@ impl_program_pin!(
     CgroupDevice,
     Iter,
     StructOps,
+    Syscall,
 );
 
 macro_rules! impl_from_pin {
@@ -1195,6 +1207,7 @@ impl_try_from_program!(
     CgroupDevice,
     Iter,
     StructOps,
+    Syscall,
 );
 
 impl_info!(
@@ -1226,6 +1239,7 @@ impl_info!(
     CgroupDevice,
     Iter,
     StructOps,
+    Syscall,
 );
 
 /// Returns an iterator over all loaded links.
