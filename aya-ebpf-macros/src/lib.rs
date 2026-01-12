@@ -41,6 +41,7 @@ use cgroup_sysctl::CgroupSysctl;
 use fentry::FEntry;
 use fexit::FExit;
 use flow_dissector::FlowDissector;
+use hid_bpf::{HidBpf, HidBpfKind};
 use kprobe::{KProbe, KProbeKind};
 use lsm::Lsm;
 use lsm_cgroup::LsmCgroup;
@@ -53,7 +54,6 @@ use sk_msg::SkMsg;
 use sk_skb::{SkSkb, SkSkbKind};
 use sock_ops::SockOps;
 use socket_filter::SocketFilter;
-use hid_bpf::{HidBpf, HidBpfKind};
 use struct_ops::StructOps;
 use tc::SchedClassifier;
 use tracepoint::TracePoint;
@@ -704,7 +704,7 @@ pub fn hid_rdesc_fixup(attrs: TokenStream, item: TokenStream) -> TokenStream {
 /// Marks a function as an HID-BPF hardware request handler.
 ///
 /// This callback is invoked when the kernel sends hardware requests like
-/// GET_REPORT or SET_REPORT. Useful for intercepting and modifying feature
+/// `GET_REPORT` or `SET_REPORT`. Useful for intercepting and modifying feature
 /// reports.
 ///
 /// # Minimum kernel version
