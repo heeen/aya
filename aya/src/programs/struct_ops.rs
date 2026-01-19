@@ -2,9 +2,7 @@
 
 use aya_obj::generated::bpf_prog_type::BPF_PROG_TYPE_STRUCT_OPS;
 
-use crate::programs::{
-    FdLink, FdLinkId, ProgramData, ProgramError, ProgramType, define_link_wrapper, load_program,
-};
+use crate::programs::{FdLink, FdLinkId, ProgramData, ProgramError, ProgramType, load_program};
 
 /// A program that implements a kernel struct ops interface.
 ///
@@ -43,10 +41,14 @@ impl StructOps {
     }
 }
 
-define_link_wrapper!(StructOpsLink, StructOpsLinkId, FdLink, FdLinkId, StructOps);
-
-impl StructOpsLink {
-    pub(crate) const fn wrap(base: FdLink) -> Self {
-        Self(Some(base))
-    }
-}
+crate::programs::links::define_link_types!(
+    /// The link used by [`StructOps`] programs.
+    ///
+    /// This is created by [`Ebpf::attach_struct_ops`](crate::Ebpf::attach_struct_ops)
+    /// after the struct ops map has been attached.
+    StructOpsLink,
+    /// The identifier for a [`StructOpsLink`].
+    StructOpsLinkId,
+    FdLink,
+    FdLinkId,
+);

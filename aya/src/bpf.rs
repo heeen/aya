@@ -1338,7 +1338,7 @@ impl Ebpf {
             EbpfError::StructOpsError(format!("failed to attach struct_ops: {io_error}"))
         })?;
 
-        Ok(StructOpsLink::wrap(FdLink::new(link_fd)))
+        Ok(FdLink::new(link_fd).into())
     }
 
     /// Loads `struct_ops` programs, matching each to a kernel struct member by

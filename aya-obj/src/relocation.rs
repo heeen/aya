@@ -358,8 +358,7 @@ impl<'a> FunctionLinker<'a> {
 
             // Look up the raw relocation for this instruction
             let raw_rel = relocations.and_then(|relocations| {
-                relocations
-                    .get(&((fun.section_offset + (ins_index - start_ins) * INS_SIZE) as u64))
+                relocations.get(&((fun.section_offset + (ins_index - start_ins) * INS_SIZE) as u64))
             });
 
             // Check if this is a call to an extern/undefined symbol (e.g. kfunc).
